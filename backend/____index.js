@@ -1,20 +1,49 @@
 import express from 'express';
+import {createPool} from 'mysql2';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import {
-	readCatalog,
-	deleteItem
-} from './utils/dbActions.js';
-import dbConnect from './utils/dbConnection.js';
 
-
-const AXIOS_PORT = process.env.AXIOS_PORT;
+const PORT = process.env.MYSQL_PORT;
+const HOST = process.env.MYSQL_HOST;
+const USER = process.env.MYSQL_USER;
+const PASSWORD = process.env.MYSQL_PASSWORD;
+const DATABASE = process.env.MYSQL_DATABASE;
 
 const app = express();
 
+const db = createPool({
+	host: HOST,
+	user: USER,
+	password: PASSWORD,
+	database: DATABASE
+});
+
 app.use(express.json());
 app.use(cors());
+
+const CREATE_BOOKS_TABLE_SQL = `CREATE TABLE IF NOT EXISTS books (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	title TEXT,
+	description TEXT,
+	cover TEXT,
+	price INTEGER	)`;
+
+
+db.getConnection((err, connection) => {
+		if (!err) {
+			console.log('Connected to the MySQL DB with CONNECTION_ID: ' + connection.threadId)
+			connection.query(CREATE_BOOKS_TABLE_SQL, (err) => {
+				if (!err) {
+					console.log('Books table has been created')
+				} else {
+					console.log(err);
+				}
+			})
+			connection.release()
+		}
+	})
+
 
 app.get("/", (req, res) => {
 	res.json('Its backend');
@@ -23,16 +52,11 @@ app.get("/", (req, res) => {
 app.get("/books", (req, res) => {
 	const q = "SELECT * FROM books";
 
-	dbConnect.query(q, (error, data) => {
+	db.query(q, (error, data) => {
 		if (error) return res.json(error);
 		return res.json(data);
 	});
 });
-
-//app.get("/books", (req, res) => {
-//	res.send( readCatalog());
-//});
-
 
 
 app.put("/books/:id", (req, res) => {
@@ -46,7 +70,7 @@ app.put("/books/:id", (req, res) => {
 	];
 	const bookId = req.params.id;
 
-	dbConnect.query(q, [...values, bookId], (error, info) => {
+	db.query(q, [...values, bookId], (error, info) => {
 		if (error) return res.json(error);
 		return res.json("Book has been updated successfully");
 	})
@@ -56,7 +80,7 @@ app.get("/books/:id", (req, res) => {
 	const q = "SELECT * FROM books WHERE id = ?";
 	const id = req.params.id;
 
-	dbConnect.query(q, [id], (error, data) => {
+	db.query(q, [id], (error, data) => {
 		if (error) return res.json(error);
 		console.log(data);
 		return res.json(data);
@@ -74,7 +98,7 @@ app.post("/books", (req, res) => {
 		req.body.cover,
 	];
 
-	dbConnect.query(q, [values], (error, info) => {
+	db.query(q, [values], (error, info) => {
 		if (error) return res.json(error);
 		return res.json("Book has been created successfully!");
 	})
@@ -84,13 +108,13 @@ app.delete("/books/:id", (req, res) => {
 	const q = "DELETE FROM books WHERE id = ?";
 	const bookId = req.params.id
 
-	dbConnect.query(q, [bookId], (error, info) => {
+	db.query(q, [bookId], (error, info) => {
 		if (error) return res.json(error);
 		return res.json("Book has been deleted successfully!");
 	})
 });
 
 
-app.listen(AXIOS_PORT, () => {
-	console.log(`Express has been started on port: ${AXIOS_PORT}`);
+app.listen(PORT, () => {
+	console.log(`Express has been started on port: ${PORT}`);
 });
