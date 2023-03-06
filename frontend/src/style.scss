@@ -1,0 +1,116 @@
+.App {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #ccc;
+
+	.header {
+		display: flex;
+		gap: 10px;
+		background-color: black;
+		width: 100%;
+		justify-content: center;
+
+		a {
+			color: white;
+
+			&.active {
+				color: rgb(172, 243, 219);
+			}
+
+			&.my-active {
+				color: lightcoral;
+			}
+		}
+
+	}
+
+	.main {
+		height: 100%;
+	}
+
+	.footer {
+		height: 50px;
+		width: 100%;
+		background-color: black;
+		text-align: center;
+		color: white;
+	}
+}
+
+.Books {
+	height: 80%;
+	padding: 0 100px;
+	display: flex;
+
+	gap: 10px;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+
+	.book {
+		flex: 1;
+		display: flex;
+		border: 1px solid #666;
+		border-radius: 10px;
+		flex-direction: column;
+		gap: 10px;
+		align-items: center;
+		padding: 10px;
+		background-color: #fff;
+
+
+		img {
+			width: 200px;
+			height: 300px;
+			object-fit: cover;
+			background-color: rgb(172, 243, 219);
+		}
+
+		.delete {
+			border: none;
+			padding: 3px 6px;
+			background-color: white;
+			cursor: pointer;
+			border: 1px solid rgb(245, 191, 191);
+			color: rgb(242, 100, 100);
+		}
+
+		.update {
+			border: none;
+			padding: 3px 6px;
+			background-color: white;
+			cursor: pointer;
+			border: 1px solid rgb(204, 204, 243);
+			color: rgb(139, 139, 234);
+		}
+	}
+}
+
+.Update,
+.Add {
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 20px;
+
+		input {
+			font-size: 16px;
+			padding: 10px;
+			border: 1px solid gray;
+			border-radius: 5px;
+			outline: none;
+
+			&:focus {
+				outline: 2px solid orangered;
+				&::placeholder {
+					visibility: hidden;
+				}
+			}
+
+		}
+	}
+}
