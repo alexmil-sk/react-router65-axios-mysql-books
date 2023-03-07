@@ -29,11 +29,6 @@ app.get("/books", (req, res) => {
 	});
 });
 
-//app.get("/books", (req, res) => {
-//	res.send( readCatalog());
-//});
-
-
 
 app.put("/books/:id", (req, res) => {
 	const q = "UPDATE books SET `id` = ?, `title` = ?, `description` = ?, `price` = ?, `cover` = ? WHERE id = ?";
