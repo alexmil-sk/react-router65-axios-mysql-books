@@ -50,6 +50,22 @@
 	justify-content: center;
 	text-align: center;
 
+	.add {
+
+		button {
+			border: 1px solid rgb(70, 25, 232);
+			padding: 6px 12px;
+			background-color: white;
+			cursor: pointer;
+			color: rgb(70, 25, 232);
+			transition: all 600ms ease-in-out;
+			&:hover {
+				background-color: rgb(70, 25, 232);
+				color: white;
+			}
+		}
+	}
+
 	.book {
 		flex: 1;
 		display: flex;
@@ -106,6 +122,7 @@
 
 			&:focus {
 				outline: 2px solid orangered;
+
 				&::placeholder {
 					visibility: hidden;
 				}

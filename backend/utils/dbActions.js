@@ -1,7 +1,7 @@
 import dbConnect from './dbConnection.js';
 
 
-const readCatalog = (req, res) => {
+const readCatalog = (_, res) => {
 	const q = "SELECT * FROM books";
 	dbConnect.query(q, (error, data) => {
 		if (error) return res.json(error);

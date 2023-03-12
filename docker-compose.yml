@@ -1,0 +1,45 @@
+version: '3'
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+  backend:
+    build: ./backend
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+    restart: always
+    ports:
+      - '5555:5555'
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: '3306'
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Lenuska
+      MYSQL_DATABASE: books_shop
+  mysql:
+    image: mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Lenuska
+      MYSQL_DATABASE: books_shop
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+volumes:
+  mysql_data:
+
+
